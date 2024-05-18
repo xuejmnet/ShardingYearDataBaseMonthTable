@@ -1,6 +1,7 @@
 using ShardingCore.Core.EntityMetadatas;
 using ShardingCore.Core.VirtualRoutes;
 using ShardingCore.Core.VirtualRoutes.TableRoutes.Abstractions;
+using ShardingCore.Helpers;
 using ShardingCore.Sharding.EntityQueryConfigurations;
 using ShardingYearAndMonth.Entities;
 
@@ -38,9 +39,9 @@ public class OrderItemTableRoute:AbstractShardingOperatorVirtualTableRoute<Order
                 return tail => String.Compare(tail, t, StringComparison.Ordinal) >= 0;
             case ShardingOperatorEnum.LessThan:
             {
-                var currentYear =new DateTime(shardingKey.Year,1,1);
+                var currentMonth = ShardingCoreHelper.GetCurrentMonthFirstDay(shardingKey);
                 //处于临界值 o=>o.time < [2021-01-01 00:00:00] 尾巴20210101不应该被返回
-                if (currentYear == shardingKey)
+                if (currentMonth == shardingKey)
                     return tail => String.Compare(tail, t, StringComparison.Ordinal) < 0;
                 return tail => String.Compare(tail, t, StringComparison.Ordinal) <= 0;
             }
