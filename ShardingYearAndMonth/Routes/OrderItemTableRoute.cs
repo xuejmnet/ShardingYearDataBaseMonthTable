@@ -29,7 +29,7 @@ public class OrderItemTableRoute:AbstractShardingOperatorVirtualTableRoute<Order
 
     public override Func<string, bool> GetRouteToFilter(DateTime shardingKey, ShardingOperatorEnum shardingOperator)
     {
-        var t = $"{shardingKey:yyyyy.MM}";
+        var t = $"{shardingKey:yyyy.MM}";
         
         switch (shardingOperator)
         {
